@@ -1,0 +1,178 @@
+#!/bin/bash
+
+## Assignment: Bash Week five (5)
+## Author: Zachary Wagner
+## Version: 10.27.2023.03
+## Purpose: BASH: You have been asked to write a menu for the department junior admins to use when they log in. Write a shell script that displays a menu of choices that takes the user to sub-choices defined by function. The menu should have a least six (6) initial choices and at least three (3) of the choices should go to sub-menus. All the menu choices will eventually run other shell scripts that you will be tasked to write. For now, simply have the end scripts print out its future function.
+
+declare -a mainMenuOptions
+declare -a subMenuOneOptions
+declare -a subMenuTwoOptions
+declare -a subMenuThreeOptions
+declare -a subMenuFourOptions
+declare -a subMenuFiveOptions
+declare -a subMenuSixOptions
+declare -i choiceInt
+declare -ir NOT_MADE=0
+main() {
+	clear
+	setChoiceInt
+    populateMainMenuOptions
+    populateSubMenuOneOptions
+    populateSubMenuTwoOptions
+    populateSubMenuThreeOptions
+    populateSubMenuFourOptions
+    populateSubMenuFiveOptions
+    populateSubMenuSixOptions
+	while [ $choiceInt -eq $NOT_MADE ]  
+	do
+        displayWelcome
+		displayMenu "${mainMenuOptions[@]}" 
+        getUsersMenuChoice "${mainMenuOptions[@]}" 
+	done
+	exit 0  
+}
+
+setChoiceInt() {
+		choiceInt=0
+}
+
+populateMainMenuOptions(){
+        mainMenuOptions=("Editing Commands" "Games" "User Administration" "Process Commands" "System Commands" "Network Commands" "Main Menu")
+}
+
+populateSubMenuOneOptions(){
+        subMenuOneOptions=("Insert" "Write" "Delete" "Quit")
+}
+
+populateSubMenuTwoOptions(){
+        subMenuTwoOptions=("Select" "Play" "Score" "Quit")
+}
+
+populateSubMenuThreeOptions(){
+        subMenuThreeOptions=("Insert" "Write" "Delete" "Quit")
+}
+
+populateSubMenuFourOptions(){
+        subMenuFourOptions=("Insert" "Write" "Delete" "Quit")
+}
+
+populateSubMenuFiveOptions(){
+        subMenuFiveOptions=("Insert" "Write" "Delete" "Quit")
+}
+
+populateSubMenuSixOptions(){
+        subMenuSixOptions=("Insert" "Write" "Delete" "Quit")
+}
+
+displayWelcome(){
+echo -e "\n WELCOME TO THE MACHINE \n"
+}
+
+displayMenu(){
+declare -i menuOptionNumber
+declare -a menuOptions=("$@")
+for (( i=0; i < ${#menuOptions[@]}; i++ ))
+do
+        menuOptionNumber=($i+1)
+        echo -e "${menuOptionNumber}.) ${menuOptions[$i]}\n"
+done
+}
+
+getUsersMenuChoice(){
+declare -a menuOptions=("$@")
+while [ $choiceInt -lt 1 ] || [ $choiceInt -gt "${#menuOptions[@]}" ]
+do
+    read -p "Please make a selection (1 - "${#menuOptions[@]}" ): " choiceInt
+
+    if [ $choiceInt -lt 1 ] || [ $choiceInt -gt "${#menuOptions[@]}" ]
+
+		then
+            if [ $choiceInt -ne $NOT_MADE ]
+                then
+	                echo -e "Incorrect input. Please try again\n"
+            fi
+        
+    elif [ $choiceInt -eq 4 ]
+        then
+            main
+    elif [ $choiceInt -eq 7 ]
+        then
+            exit
+    else 
+            processMenuChoice "${menuOptions[@]}"
+    fi
+done
+}
+
+processMenuChoice(){ 
+if [ $choiceInt -eq 1 ]
+    then
+        openMenuChoiceOne
+elif [ $choiceInt -eq 2 ] 
+    then
+        openMenuChoiceTwo
+elif [ $choiceInt -eq 3 ] 
+    then
+        openMenuChoiceThree
+elif [ $choiceInt -eq 4 ] 
+    then
+        openMenuChoiceFour
+elif [ $choiceInt -eq 5 ] 
+    then
+        openMenuChoiceFive
+else 
+    openMenuChoiceSix
+fi
+    
+}
+
+openMenuChoiceOne(){
+clear
+echo -e "MENU ONE"
+displayMenu "${subMenuOneOptions[@]}" 
+setChoiceInt
+getUsersMenuChoice "${subMenuOneOptions[@]}" 
+}
+
+openMenuChoiceTwo(){
+clear
+echo -e "MENU TWO"
+displayMenu "${subMenuOneOptions[@]}" 
+setChoiceInt
+getUsersMenuChoice "${subMenuOneOptions[@]}"
+}
+
+openMenuChoiceThree(){
+clear
+echo -e "MENU THREE"
+displayMenu "${subMenuOneOptions[@]}" 
+setChoiceInt
+getUsersMenuChoice "${subMenuOneOptions[@]}"
+}
+
+openMenuChoiceFour(){
+clear
+echo -e "MENU FOUR"
+displayMenu "${subMenuOneOptions[@]}" 
+setChoiceInt
+getUsersMenuChoice "${subMenuOneOptions[@]}"
+}
+
+openMenuChoiceFive(){
+clear
+echo -e "MENU FIVE"
+displayMenu "${subMenuOneOptions[@]}" 
+setChoiceInt
+getUsersMenuChoice "${subMenuOneOptions[@]}"
+}
+
+openMenuChoiceSix(){
+clear
+echo -e "MENU SIX"
+displayMenu "${subMenuOneOptions[@]}" 
+setChoiceInt
+getUsersMenuChoice "${subMenuOneOptions[@]}"
+}
+
+main
